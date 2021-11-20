@@ -1,0 +1,10 @@
+<h2>Log In</h2>
+<form method="post">
+
+  <input type="hidden" name="next" value="{% url 'forum_profile' %}" id="next">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Log In</button>
+  <button type="submit" formaction="{% url 'forum_profile' %}">Reg</button>
+
+</form>

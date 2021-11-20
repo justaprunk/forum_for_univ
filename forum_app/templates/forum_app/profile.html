@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+
+    <h1>Страница пользователя {{ user.username }}</h1>
+    <img class="big_photo" src="{{ user.photo }}" alt="Нету фотки">
+
+    {% if user.it_is_i %}
+    <form enctype="multipart/form-data" method="post" id="user_form" novalidate="">
+        <h2>Редактировать</h2>
+        {% csrf_token %}
+        <label for="id_username">Имя пользователя:</label>
+        <input type="text" name="username" id="id_username" value="{{ user.username }}">
+        <label for="id_password">Пароль:</label>
+        <input type="password" name="password" id="id_password">
+        <label for="id_photo">Фото:</label>
+        <input type="file" accept="image/*" name="photo" id="id_photo">
+
+        <button type="submit">Редактировать</button>
+    </form>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">
+            Выйти</button>
+    </form>
+    {% endif %}
+
+</body>
+</html>

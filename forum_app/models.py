@@ -1,19 +1,39 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.db.models import *
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin, AbstractUser
 
 
-class User(models.Model):
+class UserManager(BaseUserManager):
+    def create_superuser(self, username, password):
+        u = self.create_user(username, password)
+        u.is_superuser = True
+        u.save()
+        return u
+
+    def create_user(self, username, password):
+        u = User(username=username)
+        u.set_password(password)
+        u.save()
+        return u
+
+
+class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=64)
     profile_photo = models.ImageField(upload_to='profiles/', default=None,
                                       null=True, blank=True)
+    is_staff = True
+    USERNAME_FIELD = 'username'
 
     def __str__(self):
         return self.username
 
     class Meta:
         ordering = ['-username']
+
+    objects = UserManager()
 
 
 class Article(models.Model):
