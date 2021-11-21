@@ -4,12 +4,11 @@
 
 {% block content %}
     <h1>{{ article.title }}</h1>
-    <div class="container" style="width: 40%">
-
-        <h1>Автор:
+    <h1>Автор:
             <a href="{% url 'forum_profile' %}{{ article.author.username }}">
             {{ article.author }}</a>
-        </h1>
+    </h1>
+    <div class="container horizontal" style="width: 40%">
         <span>Выставлено: {{ article.deploy_time }}</span>
         <br>
         <span>Рейтинг: {{ article.rating }}</span>
@@ -17,15 +16,38 @@
         <img src="{% if article.title_image %}{{ article.title_image.url }}
         {% endif %}" alt="Нет изображения" width="100%" >
         <p>{{ article.text }}</p>
+
+        {% if is_mine %}
+        <form>
+            <button type="submit" class="blue_elem"
+                    formaction="{% url 'edit_article' article.id  %}">
+                Редактировать</button>
+            <button type="submit" class="red_elem"
+                    formaction="{% url 'remove_article' article.id  %}">
+                Удалить</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="container horizontal">
+        <form class="container">
+            <span>Your activity:{% if activity == 'L' %} Like
+                                {% elif activity == 'D' %} Dislike
+                                {% else %} None {% endif %}
+            </span>
+            <br>
+            <button type="submit" class="blue_elem"
+                    formaction="{% url 'activity_article' article.id 'L' %}">
+                Like</button>
+            <button type="submit" class="red_elem"
+                    formaction="{% url 'activity_article' article.id 'D' %}">
+                Dislike</button>
+        </form>
+        <h2> Комментарии </h2>
+        <div class="container">
+
+        </div>
     </div>
 
-    {% if is_mine %}
-    <form>
-        <button type="submit" class="blue_elem" formaction="{{ article.id }}/edit">
-            Редактировать</button>
-        <button type="submit" class="red_elem" formaction="{{ article.id }}/remove">
-            Удалить</button>
-    </form>
-    {% endif %}
+
 
 {% endblock %}

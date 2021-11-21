@@ -9,5 +9,6 @@ urlpatterns = [
     path('article/<id>', article_view, name='article'),
     path('article/<id>/edit', article_editor, name='edit_article'),
     path('article/<id>/remove', article_remove, name='remove_article'),
+    path('article/<id>/<activity>', article_activity, name='activity_article')
 
 ]

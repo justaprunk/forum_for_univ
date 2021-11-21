@@ -73,9 +73,16 @@ def article_view(request, id):
     except:
         return render_error(request, "Статья не существует")
 
+    try:
+        activity = Activity.objects.get(author=request.user,
+                                        article_parent=article).activity_type
+    except:
+        activity = None
+
     return render(request, 'forum_app/article.html',
                   context={'article': article,
-                           'is_mine': article.author == request.user})
+                           'is_mine': article.author == request.user,
+                           'activity': activity})
 
 
 def article_editor(request, id=None):
@@ -110,3 +117,25 @@ def article_remove(request, id):
     else:
         article.delete()
         return redirect('/forum/profile')
+
+
+def article_activity(request, id, activity):
+    try:
+        article = Article.objects.get(id=id)
+    except:
+        return render_error(request, "Статья не существует")
+    if activity not in ('L', 'D'):
+        return render_error(request, 'Неизвестный тип активности')
+    try:
+        activity_obj = Activity.objects.get(author=request.user,
+                                            article_parent=article)
+    except:
+        activity_obj = Activity(author=request.user, article_parent=article)
+
+    if activity_obj.activity_type == activity:
+        activity_obj.delete()
+    else:
+        activity_obj.activity_type = activity
+        activity_obj.save()
+
+    return redirect(f'/forum/article/{id}')

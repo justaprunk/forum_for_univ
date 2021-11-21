@@ -98,7 +98,6 @@ class Comment(models.Model):
 
 class Activity(models.Model):
     ACTIVITY_TYPES = (
-        ('V', 'View'),
         ('L', 'Like'),
         ('D', 'Dislike'),
     )
