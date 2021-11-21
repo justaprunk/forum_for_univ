@@ -56,8 +56,7 @@ ROOT_URLCONF = 'forum_for_univ.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates',
-                 BASE_DIR / 'forum_for_univ' / 'templates',
+        'DIRS': [BASE_DIR / 'forum_for_univ' / 'templates',
                  BASE_DIR / 'forum_app' / 'templates']
         ,
         'APP_DIRS': True,
@@ -110,6 +109,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+LOGOUT_REDIRECT_URL = '/auth/login'
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = 'en-us'
@@ -127,7 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

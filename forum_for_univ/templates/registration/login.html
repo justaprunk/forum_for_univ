@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
 <h2>Log In</h2>
 <form method="post">
 
@@ -8,3 +14,5 @@
   <button type="submit" formaction="{% url 'forum_profile' %}">Reg</button>
 
 </form>
+
+{% endblock %}

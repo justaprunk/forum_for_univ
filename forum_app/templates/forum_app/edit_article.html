@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}edit {{ article.title }}{% endblock %}
+
+{% block content %}
+
+    <form enctype="multipart/form-data" method="POST" novalidate="">
+        {% csrf_token %}
+
+        <label for="id_title">Название:</label>
+        <input type="text" name="title" id="id_title" maxlength="50"
+               value="{{ article.title }}">
+        <br><br>
+        <label for="id_image">Картинка:</label>
+            <input type="file" accept="image/*" name="image" id="id_image">
+        <br><br>
+        <label for="id_text">Текст:</label>
+        <input type="text" name="text" id="id_text" maxlength="500"
+               value="{{ article.text }}">
+        <br><br><br>
+        <button type="submit">{% if article %}Изменить
+                                {% else %}Добавить{% endif %}</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+.container {
+    border-style: inset;
+    padding: 15px 5px;
+}
+
+.horizontal{
+    float: left;
+    margin-right: 20px;
+}
+
+.red_elem{
+    background-color: darkred;
+    color: white;
+}
+
+.blue_elem{
+    background-color: royalblue;
+    color: white;
+}

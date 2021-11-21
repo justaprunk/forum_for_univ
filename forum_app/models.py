@@ -5,6 +5,8 @@ from django.db.models import *
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
 
+__all__ = ["User", "Article", "Comment", "Activity"]
+
 
 class UserManager(BaseUserManager):
     def create_superuser(self, username, password):
@@ -50,6 +52,7 @@ class Article(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    @property
     def rating(self):
         rating = 0
         for activity in Activity.objects.filter(article_parent=self):
@@ -68,13 +71,12 @@ class Comment(models.Model):
                                        null=True, blank=True)
     text = models.CharField(max_length=500)
     deploy_time = models.DateTimeField(auto_now_add=True)
-    attachment = models.FileField(default=None, upload_to='attachments/',
-                                  null=True, blank=True)
 
     def __str__(self):
         return f"comment for " \
                f"{self.article_parent if self.article_parent else 'another comment'}"
 
+    @property
     def rating(self):
         rating = 0
         for activity in Activity.objects.filter(comment_parent=self):
