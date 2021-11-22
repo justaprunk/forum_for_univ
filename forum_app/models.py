@@ -86,6 +86,14 @@ class Comment(models.Model):
                 rating -= 1
         return rating
 
+    def children(self, child_list=None):
+        if child_list is None:
+            child_list = list()
+        for comment in self.comments.all():
+            child_list.append(comment)
+            comment.children(child_list)
+        return child_list
+
     def clean(self):
         if (self.comment_parent and self.article_parent) or \
                 (not self.comment_parent and not self.article_parent):

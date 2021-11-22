@@ -30,7 +30,7 @@
         </form>
         {% endif %}
     </div>
-    <div class="container horizontal">
+    <div class="container horizontal" style="width: 40%">
         <form class="container">
             <span>Your activity:{% if activity == 'L' %} Like
                                 {% elif activity == 'D' %} Dislike
@@ -45,7 +45,7 @@
                 Dislike</button>
         </form>
         <h2> Комментарии </h2>
-        <form class="container" method="post">
+        <form method="post">
             {% csrf_token %}
             <label for="id_comment" style="vertical-align: top">Комментировать:</label>
             <textarea maxlength="500" name="comment" id="id_comment">Комментарий</textarea>
@@ -55,7 +55,7 @@
                 Комментировать статью
             </button>
             <br><br>
-            {% for comment in comments %}
+            {% for comment in article.comments.all %}
                 <div class="container">
                     <a href="{% url 'user_profile' comment.author.username %}">
                         {{ comment.author.username }}
@@ -74,11 +74,41 @@
                                 formaction="{% url 'remove_comment' comment.id  %}">
                             Удалить</button>
                     {% endif %}
-                    <br>
+                    <br><br>
                     <button type="submit" class="blue_elem"
                             formaction="{% url 'comment_comment' comment.id %}">
                         Комментировать
                     </button>
+                    {% for child in comment.children %}
+                        <div class="container with_tab">
+                            <a href="{% url 'user_profile' child.author.username %}">
+                                {{ child.author.username }}
+                            </a>
+                            <span>в ответ</span>
+                            <a href="{% url 'user_profile' child.comment_parent.author.username %}">
+                                {{ child.comment_parent.author.username }}
+                            </a>
+                            <span>{{ child.deploy_time }}</span>
+                            <p>{{ child.text }}</p>
+                            <span>Рейтинг: {{ child.rating }}</span>
+                            <button type="submit" class="blue_elem"
+                                    formaction="{% url 'activity_comment' child.id 'L' %}">
+                                Like</button>
+                            <button type="submit" class="red_elem"
+                                    formaction="{% url 'activity_comment' child.id 'D' %}">
+                                Dislike</button>
+                            {% if child.author == user %}
+                                <button type="submit" class="red_elem"
+                                        formaction="{% url 'remove_comment' child.id  %}">
+                                    Удалить</button>
+                            {% endif %}
+                            <br><br>
+                            <button type="submit" class="blue_elem"
+                                    formaction="{% url 'comment_comment' child.id %}">
+                                Комментировать
+                            </button>
+                        </div>
+                    {% endfor %}
                 </div>
             {% endfor %}
         </form>

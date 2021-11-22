@@ -83,7 +83,7 @@ def article_view(request, id):
                   context={'article': article,
                            'is_mine': article.author == request.user,
                            'activity': activity,
-                           'comments': Comment.objects.filter(article_parent=article),
+                           #'comments': Comment.objects.filter(article_parent=article),
                            'user': request.user})
 
 
