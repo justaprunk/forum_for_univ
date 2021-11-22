@@ -82,7 +82,9 @@ def article_view(request, id):
     return render(request, 'forum_app/article.html',
                   context={'article': article,
                            'is_mine': article.author == request.user,
-                           'activity': activity})
+                           'activity': activity,
+                           'comments': Comment.objects.filter(article_parent=article),
+                           'user': request.user})
 
 
 def article_editor(request, id=None):
@@ -139,3 +141,74 @@ def article_activity(request, id, activity):
         activity_obj.save()
 
     return redirect(f'/forum/article/{id}')
+
+
+def article_comment(request, id):
+    try:
+        article = Article.objects.get(id=id)
+    except:
+        return render_error(request, "Статья не существует")
+    if request.user.is_anonymous:
+        return redirect('/auth/login/')
+    else:
+        Comment.objects.create(article_parent=article, author=request.user,
+                               text=request.POST['comment'])
+        return redirect(f'/forum/article/{id}')
+
+
+def comment_activity(request, id, activity):
+    try:
+        comment = Comment.objects.get(id=id)
+    except:
+        return render_error(request, "Комментарий не существует")
+    if activity not in ('L', 'D'):
+        return render_error(request, 'Неизвестный тип активности')
+    try:
+        activity_obj = Activity.objects.get(author=request.user,
+                                            comment_parent=comment)
+    except:
+        activity_obj = Activity(author=request.user, comment_parent=comment)
+
+    if activity_obj.activity_type == activity:
+        activity_obj.delete()
+    else:
+        activity_obj.activity_type = activity
+        activity_obj.save()
+
+    while not comment.article_parent:
+        comment = comment.comment_parent
+
+    return redirect(f'/forum/article/{comment.article_parent.id}')
+
+
+def comment_remove(request, id):
+    try:
+        comment = Comment.objects.get(id=id)
+    except:
+        return render_error(request, "Комментарий не существует")
+    if comment.author != request.user:
+        return render_error(request, 'Это не ваш комментарий')
+    else:
+
+        comment.delete()
+
+        while not comment.article_parent:
+            comment = comment.comment_parent
+
+        return redirect(f'/forum/article/{comment.article_parent.id}')
+
+
+def comment_comment(request, id):
+    try:
+        comment = Comment.objects.get(id=id)
+    except:
+        return render_error(request, "Комментарий не существует")
+    if request.user.is_anonymous:
+        return redirect('/auth/login/')
+    else:
+        Comment.objects.create(comment_parent=comment, author=request.user,
+                               text=request.POST['comment'])
+        while not comment.article_parent:
+            comment = comment.comment_parent
+
+        return redirect(f'/forum/article/{comment.article_parent.id}')

@@ -13,9 +13,11 @@
         <br>
         <span>Рейтинг: {{ article.rating }}</span>
         <br>
-        <img src="{% if article.title_image %}{{ article.title_image.url }}
-        {% endif %}" alt="Нет изображения" width="100%" >
+        <img src="{% if article.title_image %}
+                    {{ article.title_image.url }}
+                  {% endif %}" alt="Нет изображения" width="100%">
         <p>{{ article.text }}</p>
+
 
         {% if is_mine %}
         <form>
@@ -43,9 +45,43 @@
                 Dislike</button>
         </form>
         <h2> Комментарии </h2>
-        <div class="container">
-
-        </div>
+        <form class="container" method="post">
+            {% csrf_token %}
+            <label for="id_comment" style="vertical-align: top">Комментировать:</label>
+            <textarea maxlength="500" name="comment" id="id_comment">Комментарий</textarea>
+            <br>
+            <button type="submit" class="blue_elem"
+                    formaction="{% url 'comment_article' article.id %}">
+                Комментировать статью
+            </button>
+            <br><br>
+            {% for comment in comments %}
+                <div class="container">
+                    <a href="{% url 'user_profile' comment.author.username %}">
+                        {{ comment.author.username }}
+                    </a>
+                    <span>{{ comment.deploy_time }}</span>
+                    <p>{{ comment.text }}</p>
+                    <span>Рейтинг: {{ comment.rating }}</span>
+                    <button type="submit" class="blue_elem"
+                            formaction="{% url 'activity_comment' comment.id 'L' %}">
+                        Like</button>
+                    <button type="submit" class="red_elem"
+                            formaction="{% url 'activity_comment' comment.id 'D' %}">
+                        Dislike</button>
+                    {% if comment.author == user %}
+                        <button type="submit" class="red_elem"
+                                formaction="{% url 'remove_comment' comment.id  %}">
+                            Удалить</button>
+                    {% endif %}
+                    <br>
+                    <button type="submit" class="blue_elem"
+                            formaction="{% url 'comment_comment' comment.id %}">
+                        Комментировать
+                    </button>
+                </div>
+            {% endfor %}
+        </form>
     </div>
 
 

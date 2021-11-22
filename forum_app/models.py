@@ -66,9 +66,9 @@ class Article(models.Model):
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     article_parent = models.ForeignKey(Article, on_delete=models.CASCADE,
-                                       null=True, blank=True)
+                                       null=True, blank=True, related_name='comments')
     comment_parent = models.ForeignKey('Comment', on_delete=models.CASCADE,
-                                       null=True, blank=True)
+                                       null=True, blank=True, related_name='comments')
     text = models.CharField(max_length=500)
     deploy_time = models.DateTimeField(auto_now_add=True)
 

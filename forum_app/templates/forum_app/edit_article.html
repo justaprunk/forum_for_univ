@@ -14,9 +14,8 @@
         <label for="id_image">Картинка:</label>
             <input type="file" accept="image/*" name="image" id="id_image">
         <br><br>
-        <label for="id_text">Текст:</label>
-        <input type="text" name="text" id="id_text" maxlength="500"
-               value="{{ article.text }}">
+        <label for="id_text" style="vertical-align: top">Текст:</label>
+        <textarea name="text" id="id_text" maxlength="500">{{ article.text }}</textarea>
         <br><br><br>
         <button type="submit">{% if article %}Изменить
                                 {% else %}Добавить{% endif %}</button>
