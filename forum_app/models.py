@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import *
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import PermissionsMixin, AbstractUser
+from django.contrib.auth.models import PermissionsMixin
 
 __all__ = ["User", "Article", "Comment", "Activity"]
 
@@ -44,7 +44,7 @@ class Article(models.Model):
     title = models.CharField(max_length=50)
     title_image = models.ImageField(default=None, upload_to='articles/',
                                     null=True, blank=True)
-    text = models.CharField(max_length=500)
+    text = models.CharField(max_length=500, default="")
 
     class Meta:
         ordering = ['author', '-deploy_time']
@@ -128,4 +128,4 @@ class Activity(models.Model):
     class Meta:
         ordering = ['author', '-activity_type']
         unique_together = (('author', 'article_parent',
-                            'comment_parent', 'activity_type'),)
+                            'comment_parent'),)
