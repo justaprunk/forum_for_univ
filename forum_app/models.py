@@ -39,7 +39,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Article(models.Model):
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                               related_name="articles")
     deploy_time = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=50)
     title_image = models.ImageField(default=None, upload_to='articles/',
@@ -64,7 +65,8 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                               related_name="comments")
     article_parent = models.ForeignKey(Article, on_delete=models.CASCADE,
                                        null=True, blank=True, related_name='comments')
     comment_parent = models.ForeignKey('Comment', on_delete=models.CASCADE,

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Юзеры{% endblock %}
+
+{% block content %}
+    <form method="get" class="container">
+        <label for="id_pagesize">Размер страницы</label>
+        <input type="number" name="pagesize" id="id_pagesize" value="{{ pagesize }}">
+        <label for="id_page">Страница</label>
+        <input type="number" name="page" id="id_page" value="{{ page }}">
+        <button type="submit">Просмотр</button>
+    </form>
+    <div class="container">
+        <h2>Все польователи</h2>
+        {% for user in users %}
+            <div class="container">
+                <a class="horizontal" href="{% url 'user_profile' user.username %}">{{user.username}}</a>
+                <span class="horizontal">Статей: {{ user.articles.count }}</span>
+                <span class="horizontal">Комментов: {{ user.comments.count }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <span>Общее число юзеров:{{ count }}</span>
+{% endblock %}

@@ -3,6 +3,10 @@ from django.shortcuts import redirect
 from django.contrib.auth import login
 from .models import *
 
+__all__ = ["profile", "remove_profile", "article_view", "article_editor",
+           "article_remove", "article_comment", "article_activity", "comment_activity",
+           "comment_remove", "comment_comment", "all_users"]
+
 
 def render_error(request, msg):
     return render(request, 'forum_app/error.html',
@@ -212,3 +216,19 @@ def comment_comment(request, id):
             comment = comment.comment_parent
 
         return redirect(f'/forum/article/{comment.article_parent.id}')
+
+
+def all_users(request):
+    page_size = int(request.GET.get("pagesize", 10))
+    page = int(request.GET.get("page", 0))
+    users = User.objects.all()
+
+    def users_sort(u_set):
+        return sorted(u_set, key=lambda x: x.comments.count(), reverse=True)
+
+    sort_users = users_sort(users)[page*page_size:(page + 1) * page_size]
+    return render(request, "alls/users.html",
+                  context={"users": sort_users,
+                           "count": users.count(),
+                           "page": page,
+                           "pagesize": page_size, })

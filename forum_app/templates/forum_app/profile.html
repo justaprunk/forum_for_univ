@@ -11,7 +11,7 @@
 
         {% if user.it_is_i %}
         <h2>Редактировать</h2>
-        <form class="container" style="width: 400px" enctype="multipart/form-data"
+        <form class="container" style="width: 400px;" enctype="multipart/form-data"
               method="POST" novalidate="">
             {% csrf_token %}
             <label for="id_username">Имя пользователя:</label>
@@ -25,7 +25,7 @@
             <br><br><br>
             <button type="submit">Редактировать</button>
         </form>
-        <div class="container" style="height: 30px; width: 400px" >
+        <div class="container" style="height: 30px; width: 400px;" >
             <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
                 <button class="horizontal blue_elem" type="submit">Выйти</button>
@@ -54,4 +54,5 @@
         {% endif %}
     </div>
 </div>
+<a href="{% url 'all_users' %}">Посмотреть всех пользователей</a>
 {% endblock %}
