@@ -18,6 +18,7 @@ urlpatterns = [
     path('comment/<id>/comment', comment_comment, name='comment_comment'),
     path('comment/<id>/<activity>', comment_activity, name='activity_comment'),
 
-    path('users/', all_users, name='all_users')
+    path('users/', all_users, name='all_users'),
+    path('articles/', all_articles, name='all_articles'),
 
 ]

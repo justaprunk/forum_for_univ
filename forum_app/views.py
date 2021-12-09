@@ -5,7 +5,7 @@ from .models import *
 
 __all__ = ["profile", "remove_profile", "article_view", "article_editor",
            "article_remove", "article_comment", "article_activity", "comment_activity",
-           "comment_remove", "comment_comment", "all_users"]
+           "comment_remove", "comment_comment", "all_users", "all_articles"]
 
 
 def render_error(request, msg):
@@ -232,3 +232,19 @@ def all_users(request):
                            "count": users.count(),
                            "page": page,
                            "pagesize": page_size, })
+
+
+def all_articles(request):
+    page_size = int(request.GET.get("pagesize", 10))
+    page = int(request.GET.get("page", 0))
+    articles = Article.objects.all()
+
+    def article_sort(u_set):
+        return sorted(u_set, key=lambda x: x.rating, reverse=True)
+
+    sort_articles = article_sort(articles)[page*page_size:(page + 1) * page_size]
+    return render(request, "alls/articles.html",
+        context={"articles": sort_articles,
+                 "count": articles.count(),
+                 "page": page,
+                 "pagesize": page_size, })

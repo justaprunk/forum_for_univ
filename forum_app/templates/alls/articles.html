@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Статьи{% endblock %}
+
+{% block content %}
+    <form method="get" class="container">
+        <label for="id_pagesize">Размер страницы</label>
+        <input type="number" name="pagesize" id="id_pagesize" value="{{ pagesize }}">
+        <label for="id_page">Страница</label>
+        <input type="number" name="page" id="id_page" value="{{ page }}">
+        <button type="submit">Просмотр</button>
+    </form>
+    <div class="container">
+        <h2>Все статьи</h2>
+        {% for article in articles %}
+            <div class="container">
+                <a class="horizontal" href="{% url 'article' article.id %}">{{article.title}}</a>
+                <span class="horizontal">by</span>
+                <a class="horizontal" href="{% url 'user_profile' article.author.username %}">{{ article.author.username }}</a>
+                <span class="horizontal">рейтинг: {{ article.rating }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <span>Общее число статей:{{ count }}</span>
+{% endblock %}
